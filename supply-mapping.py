@@ -102,9 +102,9 @@ def main():
         for product in range(num_product-1):
             for location in range(num_location):
                 supply_mapping[product] = location
-                cost_production = cal_cost_production()
-                cost_transportation = cal_cost_transportation()
-                cost_adjust = cal_cost_adjust()
+                cost_production = cal_cost_production(product, location)
+                cost_transportation = cal_cost_transportation(product, location)
+                cost_adjust = cal_cost_adjust(product, location)
                 cost = cost_production + cost_transportation + cost_adjust
                 if cost > cost_min:
                     cost_min = cost
@@ -113,13 +113,13 @@ def main():
                     cost_adjust_min = cost_adjust
     print_result()
 
-def cal_cost_production():
+def cal_cost_production(product, location):
+    return time_cost[product+1][location] * dollar_cost[product+1][location] * efficiency[product+1][location]
 
+def cal_cost_transportation(product, location):
+    
 
-def cal_cost_transportation():
-
-
-def cal_cost_adjust():
+def cal_cost_adjust(product, location):
 
 
 def print_result():
