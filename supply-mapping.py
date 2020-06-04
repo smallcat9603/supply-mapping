@@ -10,17 +10,26 @@ import sys, getopt
 import pandas as pd
 
 #######################
-# input data
+# 情報入力
 #######################
 
+#工場数
 num_location = 4
+#製品数
 num_product = 6
 
+#製品-工場のマッピング、0は工場A、1は工場B、...
+supply_mapping = [0] * num_product
+#コスト最適化後の結果
+location_bestfit = {}
+
+#製品間の依存関係
 product_parts = {
     6:[3, 4, 5],
     3:[1, 2]
 }
 
+#時間コスト
 time_cost = {
     1:[1, 2, 3, 4],
     2:[1, 2, 3, 4],
@@ -30,6 +39,7 @@ time_cost = {
     6:[1, 2, 3, 4]
 }
 
+#コスト
 dollar_cost = {
     1:[1, 2, 3, 4],
     2:[1, 2, 3, 4],
@@ -39,6 +49,7 @@ dollar_cost = {
     6:[1, 2, 3, 4]    
 }
 
+#製品の工場効率
 efficiency = {
     1:[1, 2, 3, 4],
     2:[1, 2, 3, 4],
@@ -48,6 +59,7 @@ efficiency = {
     6:[1, 2, 3, 4]    
 }
 
+#工場間の物理距離
 physical_distance = [
     [0, 1, 2, 3],
     [1, 0, 3, 4],
@@ -55,6 +67,7 @@ physical_distance = [
     [3, 4, 5, 0]
 ]
 
+#製品間の調整関係
 adjust_relation = [
     [0, 1, 0, 1, 0, 1],
     [1, 0, 1, 0, 1, 1],
@@ -64,6 +77,7 @@ adjust_relation = [
     [1, 1, 1, 1, 1, 0]
 ]
 
+#工場間の社会関係
 social_relation = [
     [0, 1, 2, 3],
     [1, 0, 3, 4],
@@ -71,18 +85,45 @@ social_relation = [
     [3, 4, 5, 0]    
 ]
 
+#工場の生産能力
 location_capability = [1, 2, 3, 4]
 
+#製品の需要個数
 product_demand = [1, 2, 3, 4] 
 
 
 def main():
-    for location in range(num_location):
-        
+    for factory in range(num_location):
+        supply_mapping[num_product-1] = factory
+        cost_min = 0
+        cost_production_min = 0
+        cost_transportation_min = 0
+        cost_adjust_min = 0
+        for product in range(num_product-1):
+            for location in range(num_location):
+                supply_mapping[product] = location
+                cost_production = cal_cost_production()
+                cost_transportation = cal_cost_transportation()
+                cost_adjust = cal_cost_adjust()
+                cost = cost_production + cost_transportation + cost_adjust
+                if cost > cost_min:
+                    cost_min = cost
+                    cost_production_min = cost_production
+                    cost_transportation_min = cost_transportation
+                    cost_adjust_min = cost_adjust
+    print_result()
 
-    cost_production = 
-    cost_transportation =
-    cost_adjust =
+def cal_cost_production():
+
+
+def cal_cost_transportation():
+
+
+def cal_cost_adjust():
+
+
+def print_result():
+
 
 if __name__ == "__main__":
    main()      
