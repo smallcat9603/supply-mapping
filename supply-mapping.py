@@ -4,11 +4,6 @@ This program provides a solution of factory-goods mapping.
 @author: hq
 '''
 
-import datetime
-import networkx as nx   
-import sys, getopt
-import pandas as pd
-
 #number of plants
 num_location = 4
 #number of products
