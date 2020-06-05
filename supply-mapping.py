@@ -4,6 +4,7 @@ This program provides a solution of factory-goods mapping.
 @author: hq
 '''
 
+from __future__ import division
 from itertools import product
 
 #number of plants
