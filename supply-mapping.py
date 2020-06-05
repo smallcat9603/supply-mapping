@@ -4,6 +4,8 @@ This program provides a solution of factory-goods mapping.
 @author: hq
 '''
 
+from itertools import product
+
 #number of plants
 num_location = 4
 #number of products
@@ -99,31 +101,24 @@ def main():
             # for b in range(pow(2, num_product-1)):        
             #     for product in range(num_product-1):
             #         supply_mapping[product] = (bin(b)>>product)&1
-            for p0 in range(num_location):
-                for p1 in range(num_location):
-                    for p2 in range(num_location):
-                        for p3 in range(num_location):
-                            for p4 in range(num_location):
-                                supply_mapping[0] = p0
-                                supply_mapping[1] = p1
-                                supply_mapping[2] = p2
-                                supply_mapping[3] = p3
-                                supply_mapping[4] = p4
-                                cost_production = cal_cost_production()
-                                cost_transportation = cal_cost_transportation()
-                                cost_adjust = cal_cost_adjust()
-                                cost = cost_production + cost_transportation + cost_adjust
-                                cost_2 = cost_production + cost_transportation
-                                if cost < cost_min:
-                                    cost_min = cost
-                                    cost_production_min = cost_production
-                                    cost_transportation_min = cost_transportation
-                                    cost_adjust_min = cost_adjust  
-                                if cost_2 < cost_min_2:
-                                    cost_min_2 = cost_2
-                                    cost_production_min_2 = cost_production
-                                    cost_transportation_min_2 = cost_transportation
-                                    cost_adjust_min_2 = cost_adjust
+            for p in product(range(num_location), repeat=num_product-1):
+                for i in range(num_product-1):
+                    supply_mapping[i] = p[i]
+                cost_production = cal_cost_production()
+                cost_transportation = cal_cost_transportation()
+                cost_adjust = cal_cost_adjust()
+                cost = cost_production + cost_transportation + cost_adjust
+                cost_2 = cost_production + cost_transportation
+                if cost < cost_min:
+                    cost_min = cost
+                    cost_production_min = cost_production
+                    cost_transportation_min = cost_transportation
+                    cost_adjust_min = cost_adjust  
+                if cost_2 < cost_min_2:
+                    cost_min_2 = cost_2
+                    cost_production_min_2 = cost_production
+                    cost_transportation_min_2 = cost_transportation
+                    cost_adjust_min_2 = cost_adjust
             print_result(factory, cost_min, cost_production_min, cost_transportation_min, cost_adjust_min)
             print_mapping()
             print_result_2(factory, cost_min_2, cost_production_min_2, cost_transportation_min_2, cost_adjust_min_2)
