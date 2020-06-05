@@ -6,6 +6,7 @@ This program provides a solution of factory-goods mapping.
 
 from __future__ import division
 from itertools import product
+import copy
 
 #number of plants
 num_location = 4
@@ -13,7 +14,7 @@ num_location = 4
 num_product = 6
 
 #product-plant mapping
-supply_mapping = [0] * num_product
+supply_mapping = [0] * num_product 
 
 #product relation
 product_parts = {
@@ -95,10 +96,12 @@ def main():
             cost_production_min = 0
             cost_transportation_min = 0
             cost_adjust_min = 0
+            supply_mapping_min = []
             cost_min_2 = 10000
             cost_production_min_2 = 0
             cost_transportation_min_2 = 0
-            cost_adjust_min_2 = 0            
+            cost_adjust_min_2 = 0   
+            supply_mapping_min_2 = []    
             # for b in range(pow(2, num_product-1)):        
             #     for product in range(num_product-1):
             #         supply_mapping[product] = (bin(b)>>product)&1
@@ -115,15 +118,17 @@ def main():
                     cost_production_min = cost_production
                     cost_transportation_min = cost_transportation
                     cost_adjust_min = cost_adjust  
+                    supply_mapping_min = copy.copy(supply_mapping)
                 if cost_2 < cost_min_2:
                     cost_min_2 = cost_2
                     cost_production_min_2 = cost_production
                     cost_transportation_min_2 = cost_transportation
                     cost_adjust_min_2 = cost_adjust
+                    supply_mapping_min_2 = copy.copy(supply_mapping)
             print_result(factory, cost_min, cost_production_min, cost_transportation_min, cost_adjust_min)
-            print_mapping()
+            print_mapping_min(supply_mapping_min)
             print_result_2(factory, cost_min_2, cost_production_min_2, cost_transportation_min_2, cost_adjust_min_2)
-            print_mapping()
+            print_mapping_min_2(supply_mapping_min_2)
 
 def cal_cost_production():
     cost_production = 0
@@ -159,10 +164,15 @@ def print_result_2(factory, cost_min_2, cost_production_min_2, cost_transportati
     print "Plant", factory, ": "
     print "Total cost (2 considered): ", cost_min_2, " (production cost: ", cost_production_min_2, ", transportation cost: ", cost_transportation_min_2, ", adjust cost: ", cost_adjust_min_2, ")"
 
-def print_mapping():
+def print_mapping_min(supply_mapping_min):
     print "product --> plant:"
     for product in range(num_product):
-        print product+1, " --> ", supply_mapping[product]
+        print product+1, " --> ", supply_mapping_min[product]
+
+def print_mapping_min_2(supply_mapping_min_2):
+    print "product --> plant:"
+    for product in range(num_product):
+        print product+1, " --> ", supply_mapping_min_2[product]
 
 if __name__ == "__main__":
    main()      
