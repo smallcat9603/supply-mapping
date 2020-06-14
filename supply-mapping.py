@@ -101,7 +101,11 @@ def main():
             cost_production_min_2 = 0
             cost_transportation_min_2 = 0
             cost_adjust_min_2 = 0   
-            supply_mapping_min_2 = []    
+            supply_mapping_min_2 = []  
+            count = 0  
+            cost_production_total = 0
+            cost_transportation_total = 0
+            cost_adjust_total = 0            
             # for b in range(pow(2, num_product-1)):        
             #     for product in range(num_product-1):
             #         supply_mapping[product] = (bin(b)>>product)&1
@@ -113,6 +117,10 @@ def main():
                 cost_adjust = cal_cost_adjust()
                 cost = cost_production + cost_transportation + cost_adjust
                 cost_2 = cost_production + cost_transportation
+                count += 1
+                cost_production_total += cost_production
+                cost_transportation_total += cost_transportation
+                cost_adjust_total += cost_adjust
                 if cost < cost_min:
                     cost_min = cost
                     cost_production_min = cost_production
@@ -125,6 +133,10 @@ def main():
                     cost_transportation_min_2 = cost_transportation
                     cost_adjust_min_2 = cost_adjust
                     supply_mapping_min_2 = copy.copy(supply_mapping)
+            print "count = ", count
+            print "average production cost = ", cost_production_total/count
+            print "average transportation cost = ", cost_transportation_total/count
+            print "average adjust cost = ", cost_adjust_total/count
             print_result(factory, cost_min, cost_production_min, cost_transportation_min, cost_adjust_min)
             print_mapping_min(supply_mapping_min)
             print_result_2(factory, cost_min_2, cost_production_min_2, cost_transportation_min_2, cost_adjust_min_2)
@@ -134,7 +146,7 @@ def cal_cost_production():
     cost_production = 0
     for product in range(num_product):
         location = supply_mapping[product]
-        cost_production = cost_production + time_cost[product+1][location] * dollar_cost[product+1][location] * efficiency[product+1][location]
+        cost_production += time_cost[product+1][location] * dollar_cost[product+1][location] * efficiency[product+1][location]
     return cost_production
 
 def cal_cost_transportation():
@@ -143,7 +155,7 @@ def cal_cost_transportation():
         for value in product_parts[key]:
             location_key = supply_mapping[key-1]
             location_value = supply_mapping[value-1]
-            cost_transportation = cost_transportation + physical_distance[location_key][location_value]
+            cost_transportation += physical_distance[location_key][location_value]
     return cost_transportation
 
 def cal_cost_adjust():
@@ -153,7 +165,7 @@ def cal_cost_adjust():
             if adjust_relation[p][pp] == 1:
                 location_p = supply_mapping[p]
                 location_pp = supply_mapping[pp]
-                cost_adjust = cost_adjust + pow(social_relation[location_p][location_pp], 2)/(location_capability[location_p]*location_capability[location_pp])
+                cost_adjust += pow(social_relation[location_p][location_pp], 2)/(location_capability[location_p]*location_capability[location_pp])
     return cost_adjust
 
 def print_result(factory, cost_min, cost_production_min, cost_transportation_min, cost_adjust_min):
